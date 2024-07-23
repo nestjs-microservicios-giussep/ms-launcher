@@ -13,9 +13,9 @@ services:
     volumes:
       - ./orders-ms/postgres:/var/lib/postgresql/data
     environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=123456
-      - POSTGRES_DB=ordersdb
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
   client-gateway:
     build: ./client-gateway
     ports:
@@ -45,7 +45,7 @@ services:
     environment:
       - PORT=3002
       - NATS_SERVERS=nats://nats-server:4222
-      - DATABASE_URL=postgresql://postgres:123456@postgres-db:5432/ordersdb?schema=public
+      - DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres-db:5432/ordersdb?schema=public
   payments-ms:
     build: ./payments-ms
     ports:
@@ -68,5 +68,5 @@ services:
     environment:
       - PORT=3003
       - NATS_SERVERS=nats://nats-server:4222
-      - DATABASE_URL=mongodb+srv://mongoadmin:0123456@auth-db.ktsd7ww.mongodb.net/authdb
+      - DATABASE_URL=mongodb+srv://${MONGO_USER}:${MONGO_PASSWORD}@auth-db.ktsd7ww.mongodb.net/${MONGO_DB}
       - JWT_SECRET=${JWT_SECRET}
